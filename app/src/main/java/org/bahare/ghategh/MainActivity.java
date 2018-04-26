@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
@@ -24,41 +25,46 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-         myWebView = (WebView) findViewById(R.id.webview);
+         myWebView =  findViewById(R.id.webview);
         load_web();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                finish();
-            }
-        }, 10000);
 
 
 
     }
-    private class MyBrowser extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            if (Uri.parse(url).getHost().equals("www.ghategh.ir")) {
-
-                return false;
-            }
-
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            startActivity(intent);
-            return true;
+//    private class MyWebView extends WebViewClient {
+//        @Override
+//        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//            if (Uri.parse(url).getHost().equals("www.ghategh.ir")) {
+//
+//                return false;
+//            }
+//
+//            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+//            startActivity(intent);
+//            return true;
+private class MyWebView extends WebViewClient {
+    @Override
+    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        view.loadUrl(url);
+        return true;
         }
 
     }
+
     private  void load_web(){
-
-        myWebView.setWebViewClient(new MyBrowser());
-
-        myWebView.getSettings().setLoadsImagesAutomatically(true);
-        myWebView.getSettings().setJavaScriptEnabled(true);
+    myWebView.setWebViewClient(new MyWebView());
+        //myWebView.getSettings().setJavaScriptEnabled(true);
         myWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+        myWebView.getSettings().setLoadsImagesAutomatically(true);
+       // myWebView.getSettings().setPluginsEnabled(true);
+        myWebView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+        myWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+
+        //        myWebView.setWebViewClient(new MyBrowser());
+//
+//        myWebView.getSettings().setLoadsImagesAutomatically(true);
+//        myWebView.getSettings().setJavaScriptEnabled(true);
+//        myWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         myWebView.loadUrl("http://www.ghategh.ir");
     }
     @Override
